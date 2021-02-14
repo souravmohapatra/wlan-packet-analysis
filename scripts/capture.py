@@ -1,4 +1,13 @@
 #
+# Questions to ask?
+#  - Can we manually simulate events?
+#  - Any idea how to capture 11ax related packets?
+#  - Suggested channel dwell time?
+#  - Have (and how) to decrypt?
+#  - Data frames are not captured?
+#
+
+#
 # @brief: Script to capture packets
 # @dependencies: Script needs to run with sudo
 #                Assumes the monitor mode interface is up
@@ -22,9 +31,11 @@ MANAGED_INTF = "wlp62s0"
 
 # Output file
 FILE_NAME = "packets_"
+FILE_SIZE = 512 # in mb
 
 # Functionality specific definitions
-DWELL_TIME = 0.1 # in seconds
+DWELL_TIME = 20 # in seconds
+stop_capture = False
 
 # list of 802.11 channels to hop. Has all valid 2.4Ghz, 5Ghz, 6Ghz channels. 
 # 2.4Ghz: 1 - 13
@@ -70,7 +81,7 @@ def run_tshark():
     
     # Give read/write permissions to "others" as tshark executes from that group
     run_cmd("sudo chmod o=rw " + f)
-    run_cmd("sudo tshark -i " + MON_INTF + " -w " + f + " -F libpcap")
+    run_cmd("sudo tshark -a filesize:" + str(FILE_SIZE * 1024) + " -i " + MON_INTF + " -w " + f + " -F libpcap")
 
 # Thread to do channel hopping
 def hop_channel():
@@ -88,5 +99,10 @@ if __name__ == '__main__':
     t1.start()
     t2.start()
 
-    input("Capturing packets, Press ENTER to stop capture")
+    print("Capturing packets, Press CTRL+C to stop capture")
+    start_time = time()
+
+    t1.join()
+
+    print("Capture complete. Time taken: " + str(time() - start_time).split(".")[0] + "s.")
     exit(0)
