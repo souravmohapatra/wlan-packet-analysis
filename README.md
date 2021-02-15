@@ -15,7 +15,7 @@ the managed interface to associate and thus prevent channel
 hopping.
 
 Running instructions (sudo):
-    1. iwconfig (to check if mon intf is present)
-    2. iw phy0 interface add phy0.mon type monitor (if not, add intf)
-    3. python3 capture.py (run from ./scripts/ dir only)
+    - iwconfig (to check if mon intf is present)
+    - iw phy0 interface add phy0.mon type monitor (if not, add intf)
+    - python3 capture.py (run from ./scripts/ dir only)
 
