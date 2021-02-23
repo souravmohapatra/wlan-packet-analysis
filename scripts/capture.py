@@ -86,7 +86,7 @@ def run_tshark():
     # Give read/write permissions to "others" as tshark executes from that group
     run_cmd("sudo chmod o=rw " + f_pcap)
     run_cmd("sudo chmod o=rw " + f_txt)
-    run_cmd("sudo tshark -i " + MON_INTF + " -a filesize:" + str(FILE_SIZE * 1024) + " -T fields -e frame.time -e wlan_radio.channel -e wlan.fc.type -e wlan.fc.subtype -w " + f_pcap + " >> " + f_txt)
+    run_cmd("sudo tshark -i " + MON_INTF + " -a filesize:" + str(FILE_SIZE * 1024) + " -T fields -e frame.time -e wlan_radio.channel -e wlan.fc.type -e wlan.fc.type_subtype -w " + f_pcap + " >> " + f_txt)
 
 # Thread to do channel hopping
 def hop_channel():
