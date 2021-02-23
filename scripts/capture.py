@@ -23,6 +23,7 @@
 from subprocess import Popen, PIPE
 from threading import Thread
 from time import time, sleep
+from random import seed, random
 import datetime
 
 # True if ran on Tolga's laptop
@@ -37,10 +38,11 @@ else:
 
 # Output file
 FILE_NAME = "packets_"
+FILE_NAME_TEXT = "packets_cumulative"
 FILE_SIZE = 512 # in mb
 
 # Functionality specific definitions
-DWELL_TIME = 20 # in seconds
+DWELL_TIME = 10 # Max dwell time in seconds. Hopping will happen in max(rand(), DWELL_TIME)
 stop_capture = False
 
 # list of 802.11 channels to hop. Has all valid 2.4Ghz, 5Ghz, 6Ghz channels. 
@@ -58,7 +60,7 @@ if not TOLGA:
 # Simple function to execute a shell command
 def run_cmd(cmd, disp=False):
     ''' Returns output and error code '''
-    process = Popen(cmd.split(" "), stdout=PIPE, stderr=PIPE)
+    process = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     
     stdout, stderr = process.communicate()
     rc = process.returncode
@@ -84,19 +86,24 @@ def setup_interface():
 
 # Thread to run tshark on the monitor interface
 def run_tshark():
-    f = "captures/" + FILE_NAME + datetime.datetime.now().strftime("%H-%M_%m-%d-%Y") + ".pcap"
-    run_cmd("touch " + f)
+    f_pcap = "../captures/" + FILE_NAME + datetime.datetime.now().strftime("%H-%M_%m-%d-%Y") + ".pcap"
+    f_txt = "../captures/" + FILE_NAME_TEXT + ".txt"
+    run_cmd("touch " + f_pcap)
+    run_cmd("touch " + f_txt)
     
     # Give read/write permissions to "others" as tshark executes from that group
-    run_cmd("sudo chmod o=rw " + f)
-    run_cmd("sudo tshark -a filesize:" + str(FILE_SIZE * 1024) + " -i " + MON_INTF + " -w " + f + " -F libpcap")
+    run_cmd("sudo chmod o=rw " + f_pcap)
+    run_cmd("sudo chmod o=rw " + f_txt)
+    run_cmd("sudo tshark -i " + MON_INTF + " -a filesize:" + str(FILE_SIZE * 1024) + " -T fields -e frame.time -e wlan_radio.channel -e wlan.fc.type -e wlan.fc.type_subtype -w " + f_pcap + " >> " + f_txt)
 
 # Thread to do channel hopping
 def hop_channel():
+    seed(3.14)
     while (True):
         for ch in channels:
             run_cmd("sudo iwconfig " + MON_INTF + " channel " + str(ch))
-            sleep(DWELL_TIME)
+            dw_time = max(int(random() * 100) / 10 + 1, DWELL_TIME)
+            sleep(dw_time)
 
 if __name__ == '__main__':
     setup_interface()
