@@ -6,7 +6,7 @@ from scapy.all import sniff, RadioTap
 
 # Fiddle with this method to change what goes into the file
 def convert_to_txt(pkt):
-    return F"{pkt[RadioTap].Channel}, {pkt.time}, {pkt.type}, {pkt.subtype}\n"
+    return F"{pkt[RadioTap].Channel}, {pkt.time}, {pkt.type}, {pkt.type_subtype}\n"
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser()

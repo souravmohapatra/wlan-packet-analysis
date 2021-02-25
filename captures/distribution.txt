@@ -1,0 +1,46 @@
+Association Requests	23
+Association Responses	77
+Reassociation Requests	40
+Resssociation Responses	32
+Probe Requests	14541
+Probe Responses	106355
+Fragmented frame	22
+Unrecognized	12
+Beacons	1852421
+ATIMs	7
+Disassociations	25
+Authentications	147
+Deauthentications	71
+Actions	11579
+Beamforming Action	3045
+Aruba Management Packet	21
+Unrecognized	3
+Unrecognized	4
+Unrecognized	9
+Trigger BQRP	1
+Unrecognized	8
+NDP Announcement	110932
+Block ACK Requests	58646
+Block ACKs	1720390
+PS-Polls	3
+Ready To Sends	3274997
+Clear To Sends	2871350
+ACKs	1201354
+CF-Ends	775911
+CF-Ends/CF-Acks	2
+Data	66509
+Data+CF-Ack	132
+Data+CF-Poll	160
+Data+CF-Ack+CF-Poll	18
+Null	25045
+CF-Ack	61
+CF-Poll	62
+CF-Ack+CF-Poll	25
+QoS Data	321325
+QoS Data+CF-Ack	114
+QoS Data+CF-Poll	159
+QoS Data+CF-Ack+CF-Poll	149
+QoS Null	31825
+Unrecognized	70
+QoS CF-Poll	52
+QoS CF-Ack+CF-Poll	31
